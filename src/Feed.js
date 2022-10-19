@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import CreateIcon from '@mui/icons-material/Create';
 import ImageIcon from '@mui/icons-material/Image';
 import SmartDisplayIcon from '@mui/icons-material/SmartDisplay';
@@ -7,13 +7,39 @@ import NotesIcon from '@mui/icons-material/Notes';
 import './Feed.css';
 import InputOption from './InputOption.js';
 import Post from './Post.js';
+import {db} from './firebase';
+import firebase from 'firebase';
 
 function Feed() {
   const [posts, setPosts] = useState([]);
+  const [input, setInput] = useState('');
 
-  const sendPost = e => {
+  useEffect(() => {
+    db.collection('posts')
+      .orderBy('timestamp', 'desc')
+      .onSnapshot((snapshot) =>
+        setPosts(
+          snapshot.docs.map((doc) => ({
+            id: doc.id,
+            data: doc.data(),
+          }))
+        )
+      );
+  }, []);
+
+  const sendPost = (e) => {
     e.preventDefault();
-  }
+
+    db.collection('posts').add({
+      name: 'Nitesh Sawant',
+      description: 'B.M.S. | Viva College',
+      message: input,
+      photoUrl: '',
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
+
+    setInput('');
+  };
 
   return (
     <div className='feed'>
@@ -21,8 +47,14 @@ function Feed() {
         <div className='feed__input'>
           <CreateIcon />
           <form action=''>
-            <input type='text' />
-            <button onClick={sendPost} type='submit'>Send</button>
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              type='text'
+            />
+            <button onClick={sendPost} type='submit'>
+              Send
+            </button>
           </form>
         </div>
         <div className='feed__inputOptions'>
@@ -33,14 +65,15 @@ function Feed() {
         </div>
       </div>
 
-      {posts.map((post) => (
-        <Post />
+      {posts.map(({id, data: {name, description, message, photoUrl}}) => (
+        <Post
+          key={id}
+          name={name}
+          description={description}
+          message={message}
+          photoUrl={photoUrl}
+        />
       ))}
-      <Post
-        name='Kshitij Girkar'
-        description='B.E. Computer Engineering'
-        message='Message'
-      />
     </div>
   );
 }
