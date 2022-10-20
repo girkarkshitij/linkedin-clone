@@ -8,8 +8,18 @@ import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import ChatIcon from '@mui/icons-material/Chat';
 import logo from './assets/linkedin.png';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import {useDispatch} from 'react-redux';
+import {logout} from './features/userSlice';
+import {auth} from './firebase';
 
 function Header() {
+  const dispatch = useDispatch();
+
+  const logoutOfApp = () => {
+    dispatch(logout());
+    auth.signOut();
+  };
+
   return (
     <div className='header'>
       <div className='header__left'>
@@ -28,6 +38,7 @@ function Header() {
         <HeaderOption
           avatar='https://media-exp1.licdn.com/dms/image/C5103AQHzj3HPBHPSsA/profile-displayphoto-shrink_100_100/0/1564754135550?e=1671062400&v=beta&t=48sUynDdDfzjtmjIKnjKcabzRKZDiMJ6sVnEmu_HeBw'
           title='Me'
+          onClick={logoutOfApp}
         />
       </div>
     </div>
