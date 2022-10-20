@@ -9,8 +9,11 @@ import InputOption from './InputOption.js';
 import Post from './Post.js';
 import {db} from './firebase';
 import firebase from 'firebase';
+import {useSelector} from 'react-redux';
+import {selectUser} from './features/userSlice';
 
 function Feed() {
+  const user = useSelector(selectUser);
   const [posts, setPosts] = useState([]);
   const [input, setInput] = useState('');
 
@@ -31,10 +34,10 @@ function Feed() {
     e.preventDefault();
 
     db.collection('posts').add({
-      name: 'Nitesh Sawant',
-      description: 'B.M.S. | Viva College',
+      name: user.displayName,
+      description: user.email,
       message: input,
-      photoUrl: '',
+      photoUrl: user.photoUrl || '',
       timestamp: firebase.firestore.FieldValue.serverTimestamp(),
     });
 

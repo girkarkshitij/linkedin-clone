@@ -35,11 +35,7 @@ function Header() {
         <HeaderOption Icon={BusinessCenterIcon} title='Jobs' />
         <HeaderOption Icon={ChatIcon} title='Messaging' />
         <HeaderOption Icon={NotificationsIcon} title='Notifications' />
-        <HeaderOption
-          avatar='https://media-exp1.licdn.com/dms/image/C5103AQHzj3HPBHPSsA/profile-displayphoto-shrink_100_100/0/1564754135550?e=1671062400&v=beta&t=48sUynDdDfzjtmjIKnjKcabzRKZDiMJ6sVnEmu_HeBw'
-          title='Me'
-          onClick={logoutOfApp}
-        />
+        <HeaderOption avatar={true} title='Me' onClick={logoutOfApp} />
       </div>
     </div>
   );
